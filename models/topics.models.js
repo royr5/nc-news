@@ -1,5 +1,12 @@
+const { resourceUsage } = require("process");
 const db = require("../db/connection");
 
-exports.selectTopics = ()=>{
-    return db.query(`SELECT * FROM topics`)
-}
+const endpoints = require("../endpoints.json");
+
+exports.selectTopics = () => {
+  return db.query(`SELECT * FROM topics`);
+};
+
+exports.selectEndpoints = () => {
+  return endpoints;
+};
