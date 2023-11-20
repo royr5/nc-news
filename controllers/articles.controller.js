@@ -1,8 +1,10 @@
 const { selectArticles } = require("../models/articles.models");
 
-exports.getArticles = (req, res) => {
+exports.getArticles = (req, res, next) => {
   const id = req.params.article_id;
-  selectArticles(id).then((res) => {
-    console.log(res.rows);
-  });
+  selectArticles(id)
+    .then(({ rows }) => {
+      res.status(200).send({ articles: rows });
+    })
+    .catch(next);
 };
