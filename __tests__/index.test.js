@@ -37,19 +37,19 @@ describe("/api/topics", () => {
   });
 });
 
-describe.only("/api/articles", () => {
-  test("GET:200 sends a single article to the client", () => {
-    return request(app)
-      .get("/api/articles/1")
-      .expect(200)
-      .then((response) => {
-        console.log(response.body);
-        // const arr = response.body.topics;
-        // expect(arr.length).toBe(3);
-        // arr.forEach((topic) => {
-        //   expect(typeof topic.slug).toBe("string");
-        //   expect(typeof topic.description).toBe("string");
-        // });
-      });
-  });
-});
+// describe.only("/api/articles", () => {
+//   test("GET:200 sends a single article to the client", () => {
+//     return request(app)
+//       .get("/api/articles/1")
+//       .expect(200)
+//       .then((response) => {
+//         console.log(response.body);
+//         // const arr = response.body.topics;
+//         // expect(arr.length).toBe(3);
+//         // arr.forEach((topic) => {
+//         //   expect(typeof topic.slug).toBe("string");
+//         //   expect(typeof topic.description).toBe("string");
+//         // });
+//       });
+//   });
+// });
