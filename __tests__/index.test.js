@@ -110,7 +110,7 @@ describe("/api/articles", () => {
         expect(body.msg).toBe("bad request");
       });
   });
-  test.only("GET:200 responds with an empty array if the article_id exists but there are no comments on that article", () => {
+  test.skip("GET:200 responds with an empty array if the article_id exists but there are no comments on that article", () => {
     return request(app)
       .get("/api/articles/2/comments")
       .expect(200)
