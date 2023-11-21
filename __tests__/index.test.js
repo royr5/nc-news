@@ -2,6 +2,7 @@ const app = require("../app");
 const request = require("supertest");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
+require("jest-sorted");
 
 const endpoints = require("../endpoints.json");
 
@@ -55,6 +56,7 @@ describe("/api/articles", () => {
       .then((response) => {
         const arr = response.body.articles;
         expect(arr.length).toBe(5);
+        expect(arr).toBeSortedBy("created_at", { descending: true });
         arr.forEach((article) => {
           expect(typeof article.article_id).toBe("number");
           expect(typeof article.title).toBe("string");
@@ -63,7 +65,16 @@ describe("/api/articles", () => {
           expect(typeof article.created_at).toBe("string");
           expect(typeof article.votes).toBe("number");
           expect(typeof article.article_img_url).toBe("string");
+          expect(typeof article.comment_count).toBe("string");
         });
+      });
+  });
+  test("404: respond with an error message saying path is not found", () => {
+    return request(app)
+      .get("/api/article")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("path not found");
       });
   });
 });
