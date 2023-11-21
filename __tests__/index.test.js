@@ -75,7 +75,15 @@ describe("/api/articles", () => {
       .get("/api/articles/900")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("article does not exist");
+        expect(body.msg).toBe("path not found");
+      });
+  });
+  test("GET:400 sends an appropriate status and error message when given an invalid article id", () => {
+    return request(app)
+      .get("/api/articles/banana")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
       });
   });
 });
