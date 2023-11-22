@@ -1,5 +1,7 @@
 exports.handlePsqlErrors = (err, req, res, next) => {
-  const psqlErrors = { "22P02": { status: 400, msg: "bad request" } };
+  console.log(err);
+  const psqlErrors = { "22P02": { status: 400, msg: "bad request" },  "23502": { status: 400, msg: "bad request" } };
+  
   if (psqlErrors[err.code]) {
     res
       .status(psqlErrors[err.code].status)
