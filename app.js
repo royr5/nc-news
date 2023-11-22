@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const { getTopics, getEndpoints } = require("./controllers/topics.controllers");
+const { getTopics, getEndpoints } = require("./controllers/topics.controller");
 
 
 const { getArticleComments } = require("./controllers/comments.controller");
@@ -20,11 +20,12 @@ app.get("/api/topics", getTopics);
 app.get("/api", getEndpoints);
 
 
-app.get("/api/articles/:article_id", getArticles);
+app.get("/api/articles", getArticles);
+app.get("/api/articles/:article_id", getSingleArticle);
+
 app.get("/api/articles/:article_id/comments", getArticleComments);
 
 
-app.get("/api/articles/:article_id", getSingleArticle);
 
 
 app.all("*", handleFourOhFour);

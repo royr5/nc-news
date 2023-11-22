@@ -1,7 +1,7 @@
 const {
   selectArticles,
   selectSingleArticle,
-} = require("../models/articles.models");
+} = require("../models/articles.model");
 
 exports.getArticles = (req, res, next) => {
   selectArticles()
