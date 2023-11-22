@@ -50,6 +50,26 @@ describe("/api/topics", () => {
 });
 
 describe("/api/articles", () => {
+  test("GET:200 sends an array of articles objects", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        const arr = response.body.articles;
+        expect(arr.length).toBe(5);
+        expect(arr).toBeSortedBy("created_at", { descending: true });
+        arr.forEach((article) => {
+          expect(typeof article.article_id).toBe("number");
+          expect(typeof article.title).toBe("string");
+          expect(typeof article.topic).toBe("string");
+          expect(typeof article.author).toBe("string");
+          expect(typeof article.created_at).toBe("string");
+          expect(typeof article.votes).toBe("number");
+          expect(typeof article.article_img_url).toBe("string");
+          expect(typeof article.comment_count).toBe("string");
+        });
+      });
+  });
   test("GET:200 sends a single article", () => {
     return request(app)
       .get("/api/articles/1")

@@ -1,9 +1,19 @@
-const { selectArticles } = require("../models/articles.models");
+const {
+  selectArticles,
+  selectSingleArticle,
+} = require("../models/articles.models");
 
 exports.getArticles = (req, res, next) => {
-  const id = req.params.article_id;
+  selectArticles()
+    .then(({ rows }) => {
+      res.status(200).send({ articles: rows });
+    })
+    .catch(next);
+};
 
-  selectArticles(id)
+exports.getSingleArticle = (req, res, next) => {
+  const id = req.params.article_id;
+  selectSingleArticle(id)
     .then(({ rows }) => {
       res.status(200).send({ articles: rows });
     })
