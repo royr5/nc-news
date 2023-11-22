@@ -108,3 +108,16 @@ describe("/api/articles", () => {
       });
   });
 });
+
+describe.skip("/api/articles/:article_id/comments", () => {
+  test("POST:201 adds a new comment to an article in the db and sends the new comment back", () => {
+    const newComment = {};
+    return request(app)
+      .post("/api/articles/:article_id/comments")
+      .send(newComment)
+      .expect(201)
+      .then((response) => {
+        console.log(response);
+      });
+  });
+});
