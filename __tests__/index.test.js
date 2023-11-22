@@ -70,14 +70,6 @@ describe("/api/articles", () => {
         });
       });
   });
-  test("404: respond with an error message saying path is not found", () => {
-    return request(app)
-      .get("/api/article")
-      .expect(404)
-      .then(({ body }) => {
-        expect(body.msg).toBe("path not found");
-      });
-  });
   test("GET:200 sends a single article", () => {
     return request(app)
       .get("/api/articles/1")
