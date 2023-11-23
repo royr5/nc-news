@@ -230,3 +230,28 @@ describe("/api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("/api/users", () => {
+  test("GET:200 sends an array of users objects", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const arr = body.users;
+        expect(arr.length).toBe(4);
+        arr.forEach((user) => {
+          expect(typeof user.username).toBe("string");
+          expect(typeof user.name).toBe("string");
+          expect(typeof user.avatar_url).toBe("string");
+        });
+      });
+  });
+  test("GET:404 responds with an error message saying path is not found", () => {
+    return request(app)
+      .get("/api/user")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("path not found");
+      });
+  });
+});
