@@ -109,7 +109,7 @@ describe("/api/articles", () => {
   });
 });
 
-describe("/api/article/:article_id/comments", () => {
+describe("/api/articles/:article_id/comments", () => {
   test("GET:200 sends all comments for an article", () => {
     return request(app)
       .get("/api/articles/1/comments")
@@ -139,14 +139,91 @@ describe("/api/article/:article_id/comments", () => {
   test("GET:400 sends an appropriate status and error message when given an invalid article id", () => {
     return request(app)
       .get("/api/articles/banana/comments")
+
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("bad request");
       });
   });
+
   test("GET:404 sends an appropriate status and error message when given a valid but non-existent article id", () => {
     return request(app)
       .get("/api/articles/900/comments")
+
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("path not found");
+      });
+  });
+
+  test("POST:201 adds a new comment to an article in the db and sends the new comment back", () => {
+    const newComment = {
+      body: "Delicious crackerbreads",
+      username: "icellusedkars",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        const arr = body.comment;
+        expect(arr.length).toBe(1);
+        arr.forEach((comment) => {
+          expect(typeof comment.comment_id).toBe("number");
+          expect(comment.body).toBe("Delicious crackerbreads");
+          expect(comment.article_id).toBe(1);
+          expect(comment.author).toBe("icellusedkars");
+          expect(typeof comment.votes).toBe("number");
+          expect(typeof comment.created_at).toBe("string");
+        });
+      });
+  });
+  test("POST:400 sends an appropriate status and error message if new comment has an invalid comment format", () => {
+    const newComment = {
+      body: "Delicious crackerbreads",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("POST:400 sends an appropriate status and error message when given an invalid article id", () => {
+    const newComment = {
+      body: "Delicious crackerbreads",
+      username: "icellusedkars",
+    };
+    return request(app)
+      .post("/api/articles/banana/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("POST:404 sends an appropriate status and error message when given a valid but non-existent article id", () => {
+    const newComment = {
+      body: "Delicious crackerbreads",
+      username: "icellusedkars",
+    };
+    return request(app)
+      .post("/api/articles/900/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("path not found");
+      });
+  });
+  test("POST:404 sends an appropriate status and error message when given a valid but non-existent user", () => {
+    const newComment = {
+      body: "Delicious crackerbreads",
+      username: "testUser",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("path not found");
