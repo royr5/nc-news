@@ -10,11 +10,14 @@ const {
   patchArticle,
 } = require("./controllers/articles.controller");
 
+const { postComment } = require("./controllers/comments.controller");
+
 const {
   handleCustomErrors,
   handlePsqlErrors,
   handleFourOhFour,
 } = require("./errors");
+
 
 const app = express();
 
@@ -26,7 +29,11 @@ app.get("/api", getEndpoints);
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id", getSingleArticle);
 
+
 app.patch("/api/articles/:article_id", patchArticle);
+
+app.post("/api/articles/:article_id/comments", postComment);
+
 
 app.get("/api/articles/:article_id/comments", getArticleComments);
 
