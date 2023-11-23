@@ -19,3 +19,7 @@ exports.getSingleArticle = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.patchArticle = (req,res,next)=>{
+  console.log(req);
+}

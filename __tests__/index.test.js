@@ -153,3 +153,15 @@ describe("/api/article/:article_id/comments", () => {
       });
   });
 });
+
+describe.only("/api/articles/:article_id", () => {
+  test("PATCH:200 updates an an article by its article id and responds with the updated article", () => {
+    return request(app)
+      .patch("/api/articles/:article_id")
+      .send({ 1:"chocco" })
+      .expect(200)
+      .then((response) => {
+        // expect(body.msg).toBe("path not found");
+      });
+  });
+});
