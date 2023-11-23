@@ -231,6 +231,92 @@ describe("/api/articles/:article_id/comments", () => {
   });
 });
 
+describe("/api/articles/:article_id", () => {
+  test("PATCH:200 increments an articles votes by its article id and responds with the updated article", () => {
+    const incrementVote = { inc_votes: 1 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(incrementVote)
+      .expect(200)
+      .then(({ body }) => {
+        const article = body.article[0];
+        const expectedArticle = {
+          article_id: 1,
+          title: "Living in the shadow of a great man",
+          topic: "mitch",
+          author: "butter_bridge",
+          body: "I find this existence challenging",
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 101,
+          article_img_url:
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        };
+        expect(Object.keys(article).length).toBe(8);
+        expect(article).toMatchObject(expectedArticle);
+      });
+  });
+  test("PATCH:200 decrement an articles votes by its article id and respond with the updated article", () => {
+    const incrementVote = { inc_votes: -1 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(incrementVote)
+      .expect(200)
+      .then(({ body }) => {
+        const article = body.article[0];
+        const expectedArticle = {
+          article_id: 1,
+          title: "Living in the shadow of a great man",
+          topic: "mitch",
+          author: "butter_bridge",
+          body: "I find this existence challenging",
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 99,
+          article_img_url:
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        };
+        expect(Object.keys(article).length).toBe(8);
+        expect(article).toMatchObject(expectedArticle);
+      });
+  });
+  test("PATCH:400 sends an appropriate status and error message if votes object has invalid format", () => {
+    const incrementVote = { banana: 1 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(incrementVote)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("PATCH:400 sends an appropriate status and error message if inc_votes key's value is not a number", () => {
+    const incrementVote = { inc_votes: "test" };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(incrementVote)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("PATCH:400 sends an appropriate status and error message when given an invalid article id", () => {
+    const incrementVote = { inc_votes: 1 };
+    return request(app)
+      .patch("/api/articles/banana")
+      .send(incrementVote)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("PATCH:404 sends an appropriate status and error message when given a valid but non-existent article id", () => {
+    const incrementVote = { inc_votes: 1 };
+    return request(app)
+      .patch("/api/articles/900")
+      .send(incrementVote)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("path not found");
+
 describe("/api/users", () => {
   test("GET:200 sends an array of users objects", () => {
     return request(app)
@@ -267,5 +353,27 @@ describe("/api/comments/:comment_id", () => {
       .then((response) => {
         expect(response.body.msg).toBe("bad request");
       });
+  });
+
+  describe("/api/comments/:comment_id", () => {
+    test("DELETE: deletes the specified comment and sends no content back", () => {
+      return request(app).delete("/api/comments/18").expect(204);
+    });
+    test("DELETE:404 responds with an appropriate status and error message when given a non-existent comment id", () => {
+      return request(app)
+        .delete("/api/comments/184")
+        .expect(404)
+        .then((response) => {
+          expect(response.body.msg).toBe("path not found");
+        });
+    });
+    test("DELETE:400 responds with an appropriate status and error message when given an invalid id", () => {
+      return request(app)
+        .delete("/api/comments/banana")
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe("bad request");
+        });
+    });
   });
 });

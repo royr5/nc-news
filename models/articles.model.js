@@ -29,3 +29,17 @@ exports.selectSingleArticle = (id) => {
       return { rows };
     });
 };
+
+exports.changeVotesById = (id, votes) => {
+  return db
+    .query(
+      `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`,
+      [votes, id]
+    )
+    .then(({ rows }) => {
+      if (!rows.length) {
+        return Promise.reject({ status: 404, msg: "path not found" });
+      }
+      return { rows };
+    });
+};
