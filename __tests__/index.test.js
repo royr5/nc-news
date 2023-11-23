@@ -226,7 +226,7 @@ describe("/api/articles/:article_id/comments", () => {
       .send(newComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("user does not exist");
+        expect(body.msg).toBe("path not found");
       });
   });
 });

@@ -10,12 +10,8 @@ exports.postComment = (req, res, next) => {
   const newComment = req.body;
   const user = req.body.username;
 
-  Promise.all([
-    selectSingleArticle(id),
-    postCommentOnArticle(id, newComment),
-    checkUserExists(user),
-  ])
-    .then(([articles, articleComment, users]) => {
+  postCommentOnArticle(id, newComment)
+    .then((articleComment) => {
       res.status(201).send({ comment: articleComment });
     })
     .catch(next);
