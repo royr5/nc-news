@@ -17,9 +17,7 @@ exports.postCommentOnArticle = (id, newComment) => {
 };
 
 exports.checkUserExists = (user) => {
-  return db
-    .query(`SELECT * FROM users WHERE username = $1`, [user])
-   
+  return db.query(`SELECT * FROM users WHERE username = $1`, [user]);
 };
 
 exports.selectComments = (id) => {
@@ -30,5 +28,16 @@ exports.selectComments = (id) => {
     )
     .then(({ rows }) => {
       return rows;
+    });
+};
+
+exports.removeCommentById = (id) => {
+  return db
+    .query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *`, [id])
+    .then(({ rows }) => {
+      if (!rows.length) {
+        return Promise.reject({ status: 404, msg: "path not found" });
+      }
+      return { rows };
     });
 };
