@@ -2,7 +2,10 @@ const express = require("express");
 
 const { getTopics, getEndpoints } = require("./controllers/topics.controller");
 
-const { getArticleComments } = require("./controllers/comments.controller");
+const {
+  getArticleComments,
+  deleteCommentById,
+} = require("./controllers/comments.controller");
 
 const {
   getArticles,
@@ -36,6 +39,8 @@ app.post("/api/articles/:article_id/comments", postComment);
 
 
 app.get("/api/articles/:article_id/comments", getArticleComments);
+
+app.delete("/api/comments/:comment_id", deleteCommentById);
 
 app.all("*", handleFourOhFour);
 app.use(handlePsqlErrors);

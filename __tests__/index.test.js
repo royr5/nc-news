@@ -231,6 +231,7 @@ describe("/api/articles/:article_id/comments", () => {
   });
 });
 
+
 describe("/api/articles/:article_id", () => {
   test("PATCH:200 increments an articles votes by its article id and responds with the updated article", () => {
     const incrementVote = { inc_votes: 1 };
@@ -306,6 +307,26 @@ describe("/api/articles/:article_id", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("path not found");
+
+describe("/api/comments/:comment_id", () => {
+  test("DELETE: deletes the specified comment and sends no content back", () => {
+    return request(app).delete("/api/comments/18").expect(204);
+  });
+  test('DELETE:404 responds with an appropriate status and error message when given a non-existent comment id', () => {
+    return request(app)
+      .delete('/api/comments/184')
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe('path not found');
+      });
+  });
+  test('DELETE:400 responds with an appropriate status and error message when given an invalid id', () => {
+    return request(app)
+      .delete('/api/comments/banana')
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe('bad request');
+
       });
   });
 });
