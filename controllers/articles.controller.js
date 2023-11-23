@@ -2,14 +2,19 @@ const {
   selectArticles,
   selectSingleArticle,
 } = require("../models/articles.model");
-const { selectTopics } = require("../models/topics.model");
+const { selectTopics, checkTopicExists } = require("../models/topics.model");
 
 exports.getArticles = (req, res, next) => {
   const topic = req.query.topic;
+  let arr = [selectArticles(topic)];
 
-  Promise.all([selectArticles(topic), selectTopics()])
+  if (topic) {
+    arr.push(checkTopicExists(topic));
+  }
+
+  Promise.all(arr)
     .then(([articles, topics]) => {
-      res.status(200).send({ articles });
+      res.status(200).send({ articles: articles.rows });
     })
     .catch(next);
 };

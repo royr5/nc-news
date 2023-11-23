@@ -282,7 +282,7 @@ describe("/api/articles (topic query)", () => {
         });
       });
   });
-  test.skip("GET:200 responds with an empty array if the topic exists but there are no articles with that topic", () => {
+  test("GET:200 responds with an empty array if the topic exists but there are no articles with that topic", () => {
     return request(app)
       .get("/api/articles?topic=paper")
       .expect(200)
