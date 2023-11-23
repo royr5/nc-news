@@ -231,24 +231,41 @@ describe("/api/articles/:article_id/comments", () => {
   });
 });
 
+describe("/api/users", () => {
+  test("GET:200 sends an array of users objects", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const arr = body.users;
+        expect(arr.length).toBe(4);
+        arr.forEach((user) => {
+          expect(typeof user.username).toBe("string");
+          expect(typeof user.name).toBe("string");
+          expect(typeof user.avatar_url).toBe("string");
+        });
+      });
+  });
+});
+
 describe("/api/comments/:comment_id", () => {
   test("DELETE: deletes the specified comment and sends no content back", () => {
     return request(app).delete("/api/comments/18").expect(204);
   });
-  test('DELETE:404 responds with an appropriate status and error message when given a non-existent comment id', () => {
+  test("DELETE:404 responds with an appropriate status and error message when given a non-existent comment id", () => {
     return request(app)
-      .delete('/api/comments/184')
+      .delete("/api/comments/184")
       .expect(404)
       .then((response) => {
-        expect(response.body.msg).toBe('path not found');
+        expect(response.body.msg).toBe("path not found");
       });
   });
-  test('DELETE:400 responds with an appropriate status and error message when given an invalid id', () => {
+  test("DELETE:400 responds with an appropriate status and error message when given an invalid id", () => {
     return request(app)
-      .delete('/api/comments/banana')
+      .delete("/api/comments/banana")
       .expect(400)
       .then((response) => {
-        expect(response.body.msg).toBe('bad request');
+        expect(response.body.msg).toBe("bad request");
       });
   });
 });

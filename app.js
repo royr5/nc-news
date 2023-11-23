@@ -14,6 +14,8 @@ const {
 
 const { postComment } = require("./controllers/comments.controller");
 
+const { getUsers } = require("./controllers/users.controller");
+
 const {
   handleCustomErrors,
   handlePsqlErrors,
@@ -32,7 +34,11 @@ app.post("/api/articles/:article_id/comments", postComment);
 
 app.get("/api/articles/:article_id/comments", getArticleComments);
 
+
+app.get("/api/users", getUsers);
+
 app.delete("/api/comments/:comment_id", deleteCommentById);
+
 
 app.all("*", handleFourOhFour);
 app.use(handlePsqlErrors);
