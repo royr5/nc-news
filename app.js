@@ -1,5 +1,5 @@
 const express = require("express");
-const app = express();
+
 const { getTopics, getEndpoints } = require("./controllers/topics.controller");
 
 const { getArticleComments } = require("./controllers/comments.controller");
@@ -15,6 +15,10 @@ const {
   handlePsqlErrors,
   handleFourOhFour,
 } = require("./errors");
+
+const app = express();
+
+app.use(express.json());
 
 app.get("/api/topics", getTopics);
 app.get("/api", getEndpoints);
