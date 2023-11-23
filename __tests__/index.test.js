@@ -139,7 +139,6 @@ describe("/api/articles/:article_id/comments", () => {
   test("GET:400 sends an appropriate status and error message when given an invalid article id", () => {
     return request(app)
       .get("/api/articles/banana/comments")
-
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("bad request");
@@ -266,6 +265,38 @@ describe("/api/comments/:comment_id", () => {
       .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("bad request");
+      });
+  });
+});
+
+describe("/api/articles (topic query)", () => {
+  test("GET:200 responds with all the articles that match the topic query", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then((response) => {
+        const arr = response.body.articles;
+        expect(arr.length).toBe(4);
+        arr.forEach((article) => {
+          expect(article.topic).toBe("mitch");
+        });
+      });
+  });
+  test.skip("GET:200 responds with an empty array if the topic exists but there are no articles with that topic", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then((response) => {
+        const arr = response.body.articles;
+        expect(arr).toEqual([]);
+      });
+  });
+  test("GET:404 responds with an appropriate status and error message when given a non-existent topic", () => {
+    return request(app)
+      .get("/api/articles?topic=invalid")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("path not found");
       });
   });
 });

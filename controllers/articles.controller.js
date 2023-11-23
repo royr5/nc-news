@@ -2,11 +2,14 @@ const {
   selectArticles,
   selectSingleArticle,
 } = require("../models/articles.model");
+const { selectTopics } = require("../models/topics.model");
 
 exports.getArticles = (req, res, next) => {
-  selectArticles()
-    .then(({ rows }) => {
-      res.status(200).send({ articles: rows });
+  const topic = req.query.topic;
+
+  Promise.all([selectArticles(topic), selectTopics()])
+    .then(([articles, topics]) => {
+      res.status(200).send({ articles });
     })
     .catch(next);
 };

@@ -1,6 +1,14 @@
 const db = require("../db/connection");
 
-exports.selectArticles = () => {
+exports.selectArticles = (topic) => {
+  let str = "";
+  let arr = [];
+
+  if (topic) {
+    str += "WHERE topic = $1";
+    arr.push(topic);
+  }
+
   return db
     .query(
       `SELECT articles.article_id,
@@ -9,13 +17,14 @@ exports.selectArticles = () => {
   articles.author,
   articles.created_at,
   articles.votes,
-  articles.article_img_url,COUNT(comments.comment_id) AS comment_count FROM articles JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY articles.created_at DESC;`
+  articles.article_img_url,COUNT(comments.comment_id) AS comment_count FROM articles JOIN comments ON articles.article_id = comments.article_id ${str} GROUP BY articles.article_id ORDER BY articles.created_at DESC;`,
+      arr
     )
     .then(({ rows }) => {
       if (!rows.length) {
         return Promise.reject({ status: 404, msg: "path not found" });
       }
-      return { rows };
+      return  rows ;
     });
 };
 
