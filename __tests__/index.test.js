@@ -231,7 +231,6 @@ describe("/api/articles/:article_id/comments", () => {
   });
 });
 
-
 describe("/api/articles/:article_id", () => {
   test("PATCH:200 increments an articles votes by its article id and responds with the updated article", () => {
     const incrementVote = { inc_votes: 1 };
@@ -257,7 +256,7 @@ describe("/api/articles/:article_id", () => {
       });
   });
   test("PATCH:200 decrement an articles votes by its article id and respond with the updated article", () => {
-    const incrementVote = { inc_votes:  -1 };
+    const incrementVote = { inc_votes: -1 };
     return request(app)
       .patch("/api/articles/1")
       .send(incrementVote)
@@ -289,6 +288,16 @@ describe("/api/articles/:article_id", () => {
         expect(body.msg).toBe("bad request");
       });
   });
+  test("PATCH:400 sends an appropriate status and error message if inc_votes key's value is not a number", () => {
+    const incrementVote = { inc_votes: "test" };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(incrementVote)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
   test("PATCH:400 sends an appropriate status and error message when given an invalid article id", () => {
     const incrementVote = { inc_votes: 1 };
     return request(app)
@@ -307,26 +316,28 @@ describe("/api/articles/:article_id", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("path not found");
-
-describe("/api/comments/:comment_id", () => {
-  test("DELETE: deletes the specified comment and sends no content back", () => {
-    return request(app).delete("/api/comments/18").expect(204);
-  });
-  test('DELETE:404 responds with an appropriate status and error message when given a non-existent comment id', () => {
-    return request(app)
-      .delete('/api/comments/184')
-      .expect(404)
-      .then((response) => {
-        expect(response.body.msg).toBe('path not found');
       });
   });
-  test('DELETE:400 responds with an appropriate status and error message when given an invalid id', () => {
-    return request(app)
-      .delete('/api/comments/banana')
-      .expect(400)
-      .then((response) => {
-        expect(response.body.msg).toBe('bad request');
 
-      });
+  describe("/api/comments/:comment_id", () => {
+    test("DELETE: deletes the specified comment and sends no content back", () => {
+      return request(app).delete("/api/comments/18").expect(204);
+    });
+    test("DELETE:404 responds with an appropriate status and error message when given a non-existent comment id", () => {
+      return request(app)
+        .delete("/api/comments/184")
+        .expect(404)
+        .then((response) => {
+          expect(response.body.msg).toBe("path not found");
+        });
+    });
+    test("DELETE:400 responds with an appropriate status and error message when given an invalid id", () => {
+      return request(app)
+        .delete("/api/comments/banana")
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe("bad request");
+        });
+    });
   });
 });
