@@ -109,18 +109,17 @@ describe("/api/articles", () => {
   });
 });
 
-describe.skip("/api/articles/:article_id/comments", () => {
+describe("/api/articles/:article_id/comments", () => {
   test("POST:201 adds a new comment to an article in the db and sends the new comment back", () => {
     const newComment = {
       body: "Delicious crackerbreads",
-      author: "icellusedkars",
+      username: "icellusedkars",
     };
     return request(app)
       .post("/api/articles/1/comments")
       .send(newComment)
       .expect(201)
       .then(({ body }) => {
-        console.log(body);
         const arr = body.comment;
         expect(arr.length).toBe(1);
         arr.forEach((comment) => {
@@ -148,7 +147,7 @@ describe.skip("/api/articles/:article_id/comments", () => {
   test("POST:400 sends an appropriate status and error message when given an invalid article id", () => {
     const newComment = {
       body: "Delicious crackerbreads",
-      author: "icellusedkars",
+      username: "icellusedkars",
     };
     return request(app)
       .post("/api/articles/banana/comments")
@@ -161,7 +160,7 @@ describe.skip("/api/articles/:article_id/comments", () => {
   test("POST:404 sends an appropriate status and error message when given a valid but non-existent article id", () => {
     const newComment = {
       body: "Delicious crackerbreads",
-      author: "icellusedkars",
+      username: "icellusedkars",
     };
     return request(app)
       .post("/api/articles/900/comments")
@@ -174,7 +173,7 @@ describe.skip("/api/articles/:article_id/comments", () => {
   test("POST:404 sends an appropriate status and error message when given a valid but non-existent user", () => {
     const newComment = {
       body: "Delicious crackerbreads",
-      author: "testUser",
+      username: "testUser",
     };
     return request(app)
       .post("/api/articles/1/comments")
