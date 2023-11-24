@@ -5,11 +5,14 @@ const {
 const { selectTopics, checkTopicExists } = require("../models/topics.model");
 
 exports.getArticles = (req, res, next) => {
-  const topic = req.query.topic;
-  let arr = [selectArticles(topic)];
+  const query = req.query;
+  let arr = [];
 
-  if (topic) {
-    arr.push(checkTopicExists(topic));
+  if (query && req._parsedUrl.query) {
+    arr.push(selectArticles(query));
+    arr.push(checkTopicExists(query));
+  } else {
+    arr.push(selectArticles());
   }
 
   Promise.all(arr)

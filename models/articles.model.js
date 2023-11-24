@@ -1,12 +1,12 @@
 const db = require("../db/connection");
 
-exports.selectArticles = (topic) => {
+exports.selectArticles = (query) => {
   let str = "";
   let arr = [];
 
-  if (topic) {
+  if (query) {
     str += "WHERE topic = $1";
-    arr.push(topic);
+    arr.push(query.topic);
   }
 
   return db.query(

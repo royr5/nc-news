@@ -299,4 +299,12 @@ describe("/api/articles (topic query)", () => {
         expect(response.body.msg).toBe("path not found");
       });
   });
+  test("GET:404 responds with an appropriate status and error message when given a non-existent query", () => {
+    return request(app)
+      .get("/api/articles?banana=cats")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("path not found");
+      });
+  });
 });
