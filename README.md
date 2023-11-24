@@ -15,12 +15,8 @@ To run this project install:
 - Postgres 16.1
 
 To run this project install the following dependencies:
-- dotenv
-- express
-- jest
-- jest sorted
-- pg format
-- supertest
+devDependencies - husky, jest, jest-extended, pg-format.
+dependencies - dotenv, express, jest-sorted, pg, supertest.
 
 1.Clone the repo:
 ```
