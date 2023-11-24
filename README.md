@@ -1,6 +1,15 @@
 # Northcoders News API
 
-# Instructions
+## Demo link:
+Access the API at https://news-o60m.onrender.com/
 
-To clone this project and run it locally: 
-You will need to create two .env files for your project: .env.test and .env.development. Into .env.test add PGDATABASE=nc_news_test and into .env.development add PGDATABASE= nc_news.
+## About the API
+This API interacts with a news database which contains the following tables: articles, comments, topics and users. 
+
+The endpoints for this API can be found in the endpoints.json file.
+
+## Setup
+
+
+
+
