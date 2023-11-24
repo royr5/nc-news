@@ -75,6 +75,26 @@ describe("/api/articles", () => {
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
+        const arr = body.articles;
+        arr.forEach((article) => {
+          expect(article.article_id).toBe(1);
+          expect(article.title).toBe("Living in the shadow of a great man");
+          expect(article.topic).toBe("mitch");
+          expect(article.author).toBe("butter_bridge");
+          expect(article.created_at).toBe("2020-07-09T20:11:00.000Z");
+          expect(article.votes).toBe(100);
+          expect(article.article_img_url).toBe(
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+          );
+          expect(article.comment_count).toBe("11");
+        });
+      });
+  });
+  test("GET:200 sends a single article with a new key of comment_count on object", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
         const article = body.articles[0];
         const expectedArticle = {
           article_id: 1,
@@ -86,8 +106,9 @@ describe("/api/articles", () => {
           votes: 100,
           article_img_url:
             "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+          comment_count: "11",
         };
-        expect(Object.keys(article).length).toBe(8);
+        expect(Object.keys(article).length).toBe(9);
         expect(article).toMatchObject(expectedArticle);
       });
   });

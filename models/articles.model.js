@@ -1,5 +1,8 @@
 const db = require("../db/connection");
 
+
+const { checkComments } = require("./comments.model");
+
 exports.selectArticles = (query) => {
   let str = "";
   let arr = [];
@@ -29,6 +32,9 @@ exports.selectSingleArticle = (id) => {
         return Promise.reject({ status: 404, msg: "path not found" });
       }
       return { rows };
+    })
+    .then(() => {
+      return checkComments(id);
     });
 };
 
