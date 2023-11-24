@@ -24,7 +24,7 @@ exports.getArticleComments = (req, res, next) => {
   const id = req.params.article_id;
 
   Promise.all([selectComments(id), selectSingleArticle(id)])
-    .then(([articleComments, articles]) => {
+    .then(([articleComments, articles]) => {;
       res.status(200).send({ comments: articleComments });
     })
     .catch(next);

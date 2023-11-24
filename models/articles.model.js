@@ -1,5 +1,7 @@
 const db = require("../db/connection");
 
+const { checkComments } = require("./comments.model");
+
 exports.selectArticles = () => {
   return db
     .query(
@@ -21,15 +23,15 @@ exports.selectArticles = () => {
 
 exports.selectSingleArticle = (id) => {
   return db
-    .query(
-      `SELECT articles.article_id,articles.title,articles.topic,articles.author,articles.body,articles.created_at,articles.votes,articles.article_img_url,COUNT(comments.comment_id) AS comment_count FROM comments JOIN articles ON comments.article_id = articles.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id;`,
-      [id]
-    )
+    .query(`SELECT * FROM articles WHERE article_id = $1`, [id])
     .then(({ rows }) => {
       if (!rows.length) {
         return Promise.reject({ status: 404, msg: "path not found" });
       }
       return { rows };
+    })
+    .then(() => {
+      return checkComments(id);
     });
 };
 

@@ -129,7 +129,7 @@ describe("/api/articles/:article_id/comments", () => {
         });
       });
   });
-  test.skip("GET:200 responds with an empty array if the article_id exists but there are no comments on that article", () => {
+  test("GET:200 responds with an empty array if the article_id exists but there are no comments on that article", () => {
     return request(app)
       .get("/api/articles/2/comments")
       .expect(200)
