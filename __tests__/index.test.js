@@ -6,8 +6,6 @@ require("jest-sorted");
 
 const endpoints = require("../endpoints.json");
 
-console.log("object");
-
 const {
   topicData,
   articleData,
