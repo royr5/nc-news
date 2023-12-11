@@ -20,7 +20,8 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/northcoders/be-nc-news/issues"
-  },"homepage": "https://github.com/northcoders/be-nc-news#readme",
+  },
+  "homepage": "https://github.com/northcoders/be-nc-news#readme",
   "devDependencies": {
     "husky": "^8.0.2",
     "jest": "^27.5.1",
@@ -40,6 +41,4 @@
       "jest-extended/all"
     ]
   }
- }
- 
- 
+}
