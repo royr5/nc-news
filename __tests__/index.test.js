@@ -54,6 +54,7 @@ describe("/api/articles", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
+      .timeout(10000)
       .then((response) => {
         const arr = response.body.articles;
         expect(arr.length).toBe(5);
@@ -431,12 +432,46 @@ describe("/api/articles (topic query)", () => {
         expect(response.body.msg).toBe("path not found");
       });
   });
-  test("GET:404 responds with an appropriate status and error message when given a non-existent query", () => {
+});
+
+describe("/api/articles?sort_by=col&order=asc or desc (sortby and orderby query)", () => {
+  test("GET 200: sends an array of articles sorted by column in descending order", () => {
     return request(app)
-      .get("/api/articles?banana=cats")
+      .get("/api/articles?sort_by=votes")
+      .expect(200)
+      .then((response) => {
+        const arr = response.body.articles;
+        expect(arr).toHaveLength(5);
+        expect(arr).toBeSortedBy("votes", { descending: true });
+      });
+  });
+
+  test("GET 200: sends an array of articles sorted by column in ascending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=votes&order=asc")
+      .expect(200)
+      .then((response) => {
+        const arr = response.body.articles;
+        expect(arr).toHaveLength(5);
+        expect(arr).toBeSortedBy("votes");
+      });
+  });
+
+  test("GET:400 responds with an appropriate status and error message when given an invalid order query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=votes&order=banana")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("bad request");
+      });
+  });
+
+  test("GET:404 responds with an appropriate status and error message when given a non-existent column", () => {
+    return request(app)
+      .get("/api/articles?sort_by=banana&order=asc")
       .expect(404)
       .then((response) => {
-        expect(response.body.msg).toBe("path not found");
+        expect(response.body.msg).toBe("column does not exist");
       });
   });
 });
