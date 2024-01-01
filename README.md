@@ -1,7 +1,7 @@
 # Northcoders News API
 
 ## Demo link:
-Access the API at https://news-o60m.onrender.com/
+Access the API at https://news-o60m.onrender.com/api
 
 ## About the API
 This API interacts with a news database which contains the following tables: articles, comments, topics and users. 
